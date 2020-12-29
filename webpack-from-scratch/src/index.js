@@ -1,1 +1,7 @@
-console.log('Initial file for Webpack');
+const obj = {
+  message: 'Message here',
+};
+
+const { message } = obj;
+
+console.log(message);
