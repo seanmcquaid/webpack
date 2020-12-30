@@ -1,33 +1,44 @@
-const HtmlWebPackPlugin = require('html-webpack-plugin');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const { resolve } = require('path');
 
-module.exports = {
-  mode: 'development',
+const isDevelopment = process.env.NODE_ENV !== 'production';
+const HtmlWebPackPlugin = require('html-webpack-plugin');
+
+const config = {
+  entry: {
+    main: resolve('./src/index.tsx'),
+  },
   module: {
     rules: [
       {
-        test: /\.jsx?$/,
-        loader: 'babel-loader',
-        exclude: /node_modules/,
+        test: /\.tsx?$/,
+        loader: 'awesome-typescript-loader',
+        exclude: [/node_modules/],
       },
       {
-        test: /\.s(a|c)ss$/,
-        loader: ['style-loader', 'css-loader', 'sass-loader'],
+        test: /\.js$/,
+        loader: 'source-map-loader',
+        enforce: 'pre',
       },
       {
         test: /\.html$/,
-        loader: 'html-loader',
+        use: [
+          {
+            loader: 'html-loader',
+            options: { minimize: !isDevelopment },
+          },
+        ],
       },
     ],
   },
   resolve: {
-    extensions: ['.js', '.scss'],
+    extensions: ['.js', '.ts', '.tsx'],
   },
   plugins: [
-    new CleanWebpackPlugin(),
     new HtmlWebPackPlugin({
       template: './src/index.html',
       filename: './index.html',
     }),
   ],
 };
+
+module.exports = config;
