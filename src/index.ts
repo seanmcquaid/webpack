@@ -9,7 +9,7 @@ const newUser: User = {
   id: 123,
   username: 'usernameHere',
   firstName: 'Sean',
-  lastName: 'McQuaid',
+  lastName: 'McQuizzle',
 };
 
 console.log(newUser);
