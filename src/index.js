@@ -1,6 +1,11 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import App from './app';
-import './global.scss';
+import './index.scss';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+const change = (msg) => {
+  document.querySelector('body').innerText = msg;
+};
+
+document.querySelector('body').innerText = 'Hello, World!';
+
+setTimeout(() => {
+  change('Deferred hello world!');
+}, 3000);
