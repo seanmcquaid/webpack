@@ -1,5 +1,6 @@
 const isDevelopment = process.env.NODE_ENV !== 'production';
 const HtmlWebPackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
   mode: isDevelopment ? 'development' : 'production',
@@ -7,6 +8,10 @@ module.exports = {
     new HtmlWebPackPlugin({
       template: './src/index.html',
       filename: './index.html',
+    }),
+    new MiniCssExtractPlugin({
+      filename: isDevelopment ? '[name].css' : '[name].[fullhash].css',
+      chunkFilename: isDevelopment ? '[id].css' : '[id].[fullhash].css',
     }),
   ],
   output: {
@@ -28,9 +33,52 @@ module.exports = {
           },
         ],
       },
+      {
+        test: /\.module\.s(a|c)ss$/,
+        use: [
+          {
+            loader: isDevelopment
+              ? 'style-loader'
+              : MiniCssExtractPlugin.loader,
+          },
+          {
+            loader: 'css-loader',
+          },
+          {
+            loader: 'sass-loader',
+          },
+        ],
+      },
+      {
+        test: /\.s(a|c)ss$/,
+        exclude: /\.module.(s(a|c)ss)$/,
+        use: [
+          {
+            loader: isDevelopment
+              ? 'style-loader'
+              : MiniCssExtractPlugin.loader,
+          },
+          { loader: 'css-loader' },
+          {
+            loader: 'sass-loader',
+            options: {
+              sourceMap: isDevelopment,
+            },
+          },
+        ],
+      },
     ],
   },
   resolve: {
-    extensions: ['.wasm', '.ts', '.tsx', '.mjs', '.cjs', '.js', '.json'],
+    extensions: [
+      '.wasm',
+      '.ts',
+      '.tsx',
+      '.mjs',
+      '.cjs',
+      '.js',
+      '.json',
+      '.scss',
+    ],
   },
 };
